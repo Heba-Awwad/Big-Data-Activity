@@ -12,12 +12,9 @@ object PiActivity {
 
     val sc = spark.sparkContext
 
-
     val n = 10000000
 
-
     val slices = 4
-
 
     val points = sc.parallelize(1 to n, slices)
 
@@ -34,13 +31,15 @@ object PiActivity {
       .filter{ case (x, y) => x * x + y * y <= 1.0
       }.count
 
+// val inside = xy
+//  .map { case (x, y) =>
+//    if (x * x + y * y <= 1.0) 1 else 0
+//  }
+//  .reduce(_ + _)
 
     val end = System.nanoTime()
 
     val timeSeconds = (end - start) / 1e9
-
-
-
 
 
     val piEstimate = 4.0 * inside / n
