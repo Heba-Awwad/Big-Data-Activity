@@ -13,7 +13,7 @@ object PiActivity {
     val sc = spark.sparkContext
 
 
-    val n = 100000000
+    val n = 10000000
 
 
     val slices = 4
@@ -31,10 +31,9 @@ object PiActivity {
     val start = System.nanoTime()
 
     val inside = xy
-      .map { case (x, y) =>
-        if (x * x + y * y <= 1.0) 1 else 0
-      }
-      .reduce(_ + _)
+      .filter{ case (x, y) => x * x + y * y <= 1.0
+      }.count
+
 
     val end = System.nanoTime()
 
@@ -61,3 +60,10 @@ object PiActivity {
     spark.stop()
   }
 }
+// Overall Conclusion:
+//This experiment demonstrated the relationship between data size, partitioning, parallel execution, accuracy, and performance in Apache Spark.
+// Increasing the number of samples improved the accuracy of the Monte Carlo estimation of π, but increased computational time.
+// Changing the number of partitions demonstrated that partitioning provides opportunities for parallel execution,
+// but excessive partitioning can introduce task-management overhead, particularly in a local environment.
+// The Spark UI provided a practical view of how Spark translates RDD operations into stages and tasks.
+// Finally, rewriting filter + count as map + reduce demonstrated that the same computation can be expressed using different Spark transformations and actions while maintaining a similar estimation of π.
